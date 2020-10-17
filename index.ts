@@ -1,4 +1,5 @@
 import { Observer, BehaviorSubject } from "rxjs";
+import { take } from "rxjs/operators";
 
 class TestObserver<T> implements Observer<T> {
   results: (T | string)[] = [];
@@ -10,6 +11,8 @@ class TestObserver<T> implements Observer<T> {
 const behaviorSub = new BehaviorSubject<string>("1");
 const observer = new TestObserver();
 behaviorSub.subscribe(observer);
+
 behaviorSub.next("2");
+behaviorSub.complete();
 
 console.log(observer.results);
