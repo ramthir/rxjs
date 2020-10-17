@@ -1,9 +1,15 @@
-import { of } from 'rxjs'; 
-import { map } from 'rxjs/operators';
+import { Observer, BehaviorSubject } from "rxjs";
 
+class TestObserver<T> implements Observer<T> {
+  results: (T | string)[] = [];
+  next = (value: T) => this.results.push(value);
+  error = (err: any) => this.results.push(err);
+  complete = () => this.results.push("done");
+}
 
-const source = of('World').pipe(
-  map(x => `Hello ${x}!`)
-);
+const behaviorSub = new BehaviorSubject<string>("1");
+const observer = new TestObserver();
+behaviorSub.subscribe(observer);
+behaviorSub.next("2");
 
-source.subscribe(x => console.log(x));
+console.log(observer.results);
