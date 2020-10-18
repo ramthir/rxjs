@@ -1,5 +1,5 @@
-import { Observer, BehaviorSubject, of } from "rxjs";
-import { take } from "rxjs/operators";
+import { Observer, of } from "rxjs";
+import { map } from "rxjs/operators";
 
 class TestObserver<T> implements Observer<T> {
   results: (T | string)[] = [];
@@ -8,7 +8,15 @@ class TestObserver<T> implements Observer<T> {
   complete = () => this.results.push("done");
 }
 
-const numbers$ = of(1, 2, 3, 4, 5);
+const numbers$ = of(1, 2, 3, 4, 5).pipe(
+  map(number => {
+    if (number === 3) {
+      throw "three not allowed";
+    } else {
+      return number;
+    }
+  })
+);
 
 const observer = new TestObserver();
 numbers$.subscribe(observer);
