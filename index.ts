@@ -1,5 +1,5 @@
 import { Observer, of } from "rxjs";
-import { map } from "rxjs/operators";
+import { catchError, map } from "rxjs/operators";
 
 class TestObserver<T> implements Observer<T> {
   results: (T | string)[] = [];
@@ -15,7 +15,8 @@ const numbers$ = of(1, 2, 3, 4, 5).pipe(
     } else {
       return number;
     }
-  })
+  }),
+  catchError(err => of("an error occurred"))
 );
 
 const observer = new TestObserver();
