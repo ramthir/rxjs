@@ -1,4 +1,4 @@
-import { Observer, BehaviorSubject } from "rxjs";
+import { Observer, BehaviorSubject, of } from "rxjs";
 import { take } from "rxjs/operators";
 
 class TestObserver<T> implements Observer<T> {
@@ -8,11 +8,9 @@ class TestObserver<T> implements Observer<T> {
   complete = () => this.results.push("done");
 }
 
-const behaviorSub = new BehaviorSubject<string>("1");
-const observer = new TestObserver();
-behaviorSub.subscribe(observer);
+const numbers$ = of(1, 2, 3, 4, 5);
 
-behaviorSub.next("2");
-behaviorSub.complete();
+const observer = new TestObserver();
+numbers$.subscribe(observer);
 
 console.log(observer.results);
