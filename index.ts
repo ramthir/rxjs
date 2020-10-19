@@ -1,18 +1,8 @@
-import { Observer, BehaviorSubject } from "rxjs";
-import { take } from "rxjs/operators";
+import { of, concat } from "rxjs";
 
-class TestObserver<T> implements Observer<T> {
-  results: (T | string)[] = [];
-  next = (value: T) => this.results.push(value);
-  error = (err: any) => this.results.push(err);
-  complete = () => this.results.push("done");
-}
+const series1$ = of("a", "b");
+const series2$ = of("x", "y");
 
-const behaviorSub = new BehaviorSubject<string>("1");
-const observer = new TestObserver();
-behaviorSub.subscribe(observer);
+const result$ = concat(series1$, series2$);
 
-behaviorSub.next("2");
-behaviorSub.complete();
-
-console.log(observer.results);
+result$.subscribe(console.log);
